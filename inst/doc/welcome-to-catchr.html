@@ -12,7 +12,7 @@
 
 <meta name="author" content="Zachary Burchill" />
 
-<meta name="date" content="2019-02-04" />
+<meta name="date" content="2019-07-08" />
 
 <title>Getting started with catchr</title>
 
@@ -278,7 +278,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Getting started with catchr</h1>
 <h4 class="author"><em>Zachary Burchill</em></h4>
-<h4 class="date"><em>2019-02-04</em></h4>
+<h4 class="date"><em>2019-07-08</em></h4>
 
 
 
@@ -496,7 +496,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </section>
 <section id="all-plans-are-calling-handlers" class="level3">
 <h3>All plans are “calling handlers”</h3>
-<p>This is definitely more of a technical point, but all the plans in catchr are technically evaluated in order. Currently (<code>rlang 0.3.1</code>) <code>rlang</code>’s condition-handling function, <code>with_handlers</code>, has the relatively unintuitive property of not checking its handlers in the order they are defined, but first checking all the “exiting” handlers, and then checking all the “calling” handlers. catchr actually offers a function inspired by <code>with_handlers</code> that strictly checks these in order and uses <code>rlang</code>’s schema (<code>with_ordered_handlers</code>), but catchr’s main condition handling does one better: it gets rid of “exiting” handlers all together.</p>
+<p>This is definitely more of a technical point, but all the plans in catchr are technically evaluated in order. Currently (<code>rlang 0.3.1</code>) <code>rlang</code>’s condition-handling function, <code>with_handlers</code>, has the relatively unintuitive property of not checking its handlers in the order they are defined, but first checking all the “exiting” handlers, and then checking all the “calling” handlers. catchr’s main condition handling does better: it gets rid of “exiting” handlers all together.</p>
 <p>Ok, this is beginning to get <em>much</em> more technical, but there are many other benefits to making all the plans (and therefore, handlers) “calling” handlers. For one, any plan has the option of restarting the code (via <code>muffle</code>, or invoking user-created restarts).</p>
 <p>But each plan can also act as an “exiting” handler with the use of the <code>exit</code> term, or the <code>user_exit()</code> and <code>exit_with()</code> functions. In essence, catchr gives you the best of both worlds!</p>
 </section>
