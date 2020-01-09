@@ -7,19 +7,20 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="Zachary Burchill" />
 
-<meta name="date" content="2019-07-08" />
+<meta name="date" content="2020-01-08" />
 
 <title>Getting started with catchr</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
@@ -81,7 +82,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -269,6 +292,9 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
+
+
+
 </head>
 
 <body>
@@ -277,14 +303,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Getting started with catchr</h1>
-<h4 class="author"><em>Zachary Burchill</em></h4>
-<h4 class="date"><em>2019-07-08</em></h4>
+<h4 class="author">Zachary Burchill</h4>
+<h4 class="date">2020-01-08</h4>
 
 
 
 <p>Compared to many other programming languages, the way <code>R</code> handles “conditions”—errors, warnings, messages, and most things referred to as “exceptions” in other languages—is pretty unintuitive.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> R’s help file on the subject is basically impenetrable,<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and even though Hadley Wickham has stepped in and produced <a href="http://adv-r.had.co.nz/beyond-exception-handling.html">a very helpful guide on conditions</a>, understanding what’s going on is still pretty hard, and actually <em>handling</em> conditions is even harder.</p>
 <p>At its heart, catchr is designed to <del>make it so that you never have to read any of that stuff</del> make dealing with conditions easy from the get-go.</p>
-<section id="the-ol-razzle-dazzle" class="level2">
+<div id="the-ol-razzle-dazzle" class="section level2">
 <h2>The ol’ razzle-dazzle</h2>
 <p>Let’s hit you with some imaginary scenarios here, before we get down to the nitty-gritty.</p>
 <p>Suppose I want to run some code, and I want to catch any warnings it produces, “hide” them so they don’t appear, and instead just store them so I can do something else with them later on. All without making my code halt or start over.</p>
@@ -301,8 +327,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb4-3" title="3">  <span class="dt">warning =</span> <span class="kw">c</span>(tomessage, muffle),</a>
 <a class="sourceLine" id="cb4-4" title="4">  <span class="dt">error =</span> muffle)</a></code></pre></div>
 <p>I can do that too, and that’s only <em>beginning</em> to scratch the surface of catchr. Although most of the detailed information can be found in the help files and manual, let’s go over some of the basics.</p>
-</section>
-<section id="catching-conditions-with-plans" class="level2">
+</div>
+<div id="catching-conditions-with-plans" class="section level2">
 <h2>Catching conditions with “plans”</h2>
 <p>Let’s take a look at some of the code we saw before:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">results &lt;-<span class="st"> </span><span class="kw">catch_expr</span>(<span class="kw">arbitrary_code</span>(), <span class="dt">warning =</span> <span class="kw">c</span>(collect, muffle))</a></code></pre></div>
@@ -310,13 +336,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>In catchr, users use functions like building blocks to a “plan” of what to do for particular conditions. Users can specify their own functions or use catchr functions, but <code>catcher</code> also offers a useful toolbox of behaviors that work their magic behind the scene through catchr’s simple <a href="http://adv-r.had.co.nz/dsl.html">domain-specific language</a>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p>A catchr “plan” starts off as a named argument, where its name is the type of condition it will apply to (e.g., “message”, “warning”, “error”, etc.), and its value will eventually become a function that will take in the condition and do stuff with it. catchr’s “secret sauce” lets you pass in each plan as a list of functions that will be applied to the condition in order.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
 <p>But catchr also comes full of stock functions that make condition handling simple—these special functions can be inputted as strings, but catchr promotes more-readable code and saves you extra typing by letting you enter them as unquoted special terms, like <code>collect</code> and <code>muffle</code> in the example above.</p>
-<section id="special-reserved-terms" class="level3">
+<div id="special-reserved-terms" class="section level3">
 <h3>Special reserved terms</h3>
 <p>These special terms cover some of the most common behaviors users might want to use:</p>
 <table>
 <colgroup>
-<col style="width: 27%"></col>
-<col style="width: 72%"></col>
+<col width="27%"></col>
+<col width="72%"></col>
 </colgroup>
 <thead>
 <tr class="header">
@@ -356,9 +382,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>These can be used as building blocks just like normal functions. For example, in the previous example, we saw how <code>collect</code> and <code>muffle</code> were strung together to make a plan.</p>
-</section>
-</section>
-<section id="even-less-typing" class="level2">
+</div>
+</div>
+<div id="even-less-typing" class="section level2">
 <h2>Even <em>less</em> typing</h2>
 <p>Is typing out plans multiple times <em>still</em> too much typing? Well, catchr lets you save even <em>more</em> space by giving you the option of passing in <em>unnamed</em> arguments into plans!</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">print</span>(<span class="kw">get_default_plan</span>())</a>
@@ -370,8 +396,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb6-7" title="7"></a>
 <a class="sourceLine" id="cb6-8" title="8">my_plans &lt;-<span class="st"> </span><span class="kw">make_plans</span>(warning, message, error)</a></code></pre></div>
 <p>These unnamed arguments can be entered as either strings or unquoted terms, and should correspond to the name of a condition you want to catch. They will automatically be given whatever catchr’s default plan is, which can be get/set via <code>get_default_plan()</code> and <code>set_default_plan</code>, respectively. Named and unnamed arguments can be mixed freely. Other default behaviors can be get/set with <code>catchr_default_opts()</code>.</p>
-</section>
-<section id="collecting-conditions" class="level2">
+</div>
+<div id="collecting-conditions" class="section level2">
 <h2>“Collecting” conditions</h2>
 <p>As you might have noticed, many of the previous examples use a special term, <code>collect</code>. Having the ability to “collect” conditions is one of the most useful features in catchr.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">throw_a_fit &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
@@ -443,11 +469,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb9-13" title="13">               <span class="dt">errors =</span>   <span class="kw">paste</span>(res<span class="op">$</span>error, <span class="dt">collapse=</span><span class="st">&quot; &quot;</span>),</a>
 <a class="sourceLine" id="cb9-14" title="14">               <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) </a>
 <a class="sourceLine" id="cb9-15" title="15">  })</a></code></pre></div>
-</section>
-<section id="other-goodies" class="level2">
+</div>
+<div id="other-goodies" class="section level2">
 <h2>Other goodies</h2>
 <p>catchr offers many other benefits, to the point where trying to document them all in a single vignette doesn’t make sense. I’ll point out some of the more unique ones here, but the help docs are very extensive, so give them a try!</p>
-<section id="catching-misc-conditions" class="level3">
+<div id="catching-misc-conditions" class="section level3">
 <h3>Catching “misc” conditions</h3>
 <p>Sometimes we don’t want to have to specify every alternative condition out there, and we might just want to divide conditions into one type and “everything else”.</p>
 <p>You can do this by making plans for the “misc” condition, a term catchr reserves for any condition(s) that you haven’t already specified. Thus:</p>
@@ -458,8 +484,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb11-2" title="2">  message, warning, error, misc,</a>
 <a class="sourceLine" id="cb11-3" title="3">  <span class="dt">.opts =</span> <span class="kw">catchr_opts</span>(<span class="dt">default_plan =</span> <span class="kw">c</span>(collect, muffle),</a>
 <a class="sourceLine" id="cb11-4" title="4">                      <span class="dt">drop_empty_conds =</span> T))</a></code></pre></div>
-</section>
-<section id="display-conditions-in-style" class="level3">
+</div>
+<div id="display-conditions-in-style" class="section level3">
 <h3>Display conditions <em>in style</em></h3>
 <p>If you have the <code>crayon</code> package installed, you can display messages without raising them in whatever <code>crayon</code> stylings you want (though you won’t see the styles in this vignette document):</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">make_warnings &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
@@ -477,8 +503,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-13" title="13"><span class="co">#&gt; simpleWarning in `make_warnings()`: This warning has a call</span></a>
 <a class="sourceLine" id="cb12-14" title="14"><span class="co">#&gt; simpleWarning: This warning does not</span></a>
 <a class="sourceLine" id="cb12-15" title="15"><span class="co">#&gt; [1] &quot;done&quot;</span></a></code></pre></div>
-</section>
-<section id="play-sounds-when-conditions-are-raised" class="level3">
+</div>
+<div id="play-sounds-when-conditions-are-raised" class="section level3">
 <h3>Play sounds when conditions are raised</h3>
 <p>Particularly useful for when you’re working in a different window and waiting for a job to finish / do something unexpected, catchr lets you play short sounds whenever conditions are raised.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> This functionality requires the <a href="https://CRAN.R-project.org/package=beepr"><code>beepr</code></a> package, which I’ve found absolutely worth downloading.</p>
 <p>For example, you can have it alert you when a condition is raised via sound, display the condition without raising it, and keep going:</p>
@@ -493,15 +519,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Or you could imagine making a wrapper that screams and stop evaluation whenever it encounters <em>any</em> unexpected condition:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">tell_you_when_it_blows_up &lt;-<span class="st"> </span><span class="kw">make_catch_fn</span>(<span class="dt">condition =</span> <span class="kw">c</span>(display, <span class="kw">beep_with</span>(<span class="dv">9</span>), exit))</a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="kw">tell_you_when_it_blows_up</span>(<span class="kw">message</span>(<span class="st">&quot;Oopsies!&quot;</span>))</a></code></pre></div>
-</section>
-<section id="all-plans-are-calling-handlers" class="level3">
+</div>
+<div id="all-plans-are-calling-handlers" class="section level3">
 <h3>All plans are “calling handlers”</h3>
 <p>This is definitely more of a technical point, but all the plans in catchr are technically evaluated in order. Currently (<code>rlang 0.3.1</code>) <code>rlang</code>’s condition-handling function, <code>with_handlers</code>, has the relatively unintuitive property of not checking its handlers in the order they are defined, but first checking all the “exiting” handlers, and then checking all the “calling” handlers. catchr’s main condition handling does better: it gets rid of “exiting” handlers all together.</p>
 <p>Ok, this is beginning to get <em>much</em> more technical, but there are many other benefits to making all the plans (and therefore, handlers) “calling” handlers. For one, any plan has the option of restarting the code (via <code>muffle</code>, or invoking user-created restarts).</p>
 <p>But each plan can also act as an “exiting” handler with the use of the <code>exit</code> term, or the <code>user_exit()</code> and <code>exit_with()</code> functions. In essence, catchr gives you the best of both worlds!</p>
-</section>
-</section>
-<section class="footnotes">
+</div>
+</div>
+<div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>At least, I <em>thought</em> it was. Now I understand that it’s everything <em>else</em> that doesn’t make sense.<a href="#fnref1" class="footnote-back">↩</a></p></li>
@@ -512,8 +538,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li id="fn6"><p>i.e., “suppresses”, “catches”, “hides”—whatever you want to call it<a href="#fnref6" class="footnote-back">↩</a></p></li>
 <li id="fn7"><p>If you’re going to be doing something like this, make sure <code>getOption(&quot;warn&quot;)==1</code><a href="#fnref7" class="footnote-back">↩</a></p></li>
 </ol>
-</section>
+</div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
