@@ -1,10 +1,10 @@
-05366f0384e0d86c20e7a2136c28707c *DESCRIPTION
+e029c9ce518232ebad433f81c078020b *DESCRIPTION
 5f01a5cd38256929cf0f587eaa63565c *LICENSE
 af1d084c9302d619994bc499e08559a9 *NAMESPACE
-88210ff3c3185ae89fed08e7b4370bd9 *NEWS.md
+11a9b5d1a9260b36b91832afa260d1ec *NEWS.md
 3b4eee944cc74d0db3e9dc1b130ca5d7 *R/arg-wrangling.R
-835d0ee2fe31fd4fd7adaf98b0a455bd *R/catching-n-plans.R
-bdcd227bfe9ee5feef4400de157adc9e *R/check-n-clean.R
+33768054cf4b5aa487d7ea3f6f72f1af *R/catching-n-plans.R
+17f33733ca795905136fbcc7805c120d *R/check-n-clean.R
 874c9d0b099daf11802b8884956a494e *R/help-docs.R
 f0bfdb28483b79edb74f9b103755ad97 *R/make-handlers.R
 9a3176083154bfd93d77cef698c135df *R/options.R
@@ -13,9 +13,9 @@ f0bfdb28483b79edb74f9b103755ad97 *R/make-handlers.R
 b99089f914da80140fa032f1104d8b36 *README.md
 9157ae1460aa2fa31c963514f5932e10 *build/vignette.rds
 08c77dc93328ca62b01b1c41db584850 *inst/WORDLIST
-ba351c2f2587e7d7bea9f9b253a8a100 *inst/doc/welcome-to-catchr.R
+413c30bd4dc314134f313c13dce825c2 *inst/doc/welcome-to-catchr.R
 c33003e19dc6a4087504d297891205f3 *inst/doc/welcome-to-catchr.Rmd
-3400be37ddf75e817b8bee91d389feea *inst/doc/welcome-to-catchr.html
+3e3ac2b6ada73471ceef4db7d1cdd658 *inst/doc/welcome-to-catchr.html
 65b722a6e76936778120a603f4e273c1 *man/args_and_kwargs.Rd
 8fb8ba1ce98eb601f0e911bc4beeee7e *man/beep_with.Rd
 e13a05d1d23200481bc65f395c17e2c9 *man/catchers.Rd
@@ -37,5 +37,5 @@ ef866428abc6facf954c513dc9fa03c1 *man/user_exits.Rd
 cea73740ba65d24634c91b7763237b62 *man/view-plans.Rd
 0622a97a2aaa3c342f09636052c2d7f5 *tests/spelling.R
 c98594427b3c143f2f66b42e92a7033f *tests/testthat.R
-9e25f3b51bcd7febdf19aa55a042ae24 *tests/testthat/test-testing.R
+a373a70767056b99b6b4a9883751d6e5 *tests/testthat/test-testing.R
 c33003e19dc6a4087504d297891205f3 *vignettes/welcome-to-catchr.Rmd
